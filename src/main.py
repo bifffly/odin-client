@@ -7,12 +7,11 @@ class TCPClient:
     def start(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((self.host, self.port))
-
         print("Connected to", s.getsockname())
 
-        req = input("Enter req:")
+        req = input("Enter req: ")
         s.sendall(str.encode(req))
-        res = s.recv(1024)
+        res = s.recv(4096)
         print(res.decode())
         s.close()
 
