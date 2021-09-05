@@ -23,7 +23,7 @@ while True:
             fp = s.makefile("rb")
             header = fp.readline()
             header = header.decode("UTF-8").strip()
-            version, status = header.split()
+            _, status = header.split()
             if status == "B":
                 print("Error code B: file not found")
                 break
@@ -37,9 +37,32 @@ while True:
         print(err)
         continue
 
-    if version == "rydja1":
-        body = fp.read()
-        body = body.decode("UTF-8")
-        print(body)
+    body = fp.read()
+    body = body.decode("UTF-8")
+    blist, nlist = False, False
+    nlistnum = 1
+    for line in body.splitlines():
+        if line.startswith("@rydja"):
+            print(line.split("(")[1].split(")")[0])
+            print("----------")
+        elif line.startswith("@head"):
+            print("#", line.split("(")[1].split(")")[0])
+        elif line.startswith("@hhead"):
+            print("##", line.split("(")[1].split(")")[0])
+        elif line.startswith("@hhhead"):
+            print("###", line.split("(")[1].split(")")[0])
+        elif line.startswith("@blist"):
+            blist = not blist
+        elif line.startswith("@nlist"):
+            nlist = not nlist
+            if not nlist:
+                nlistnum = 1
+        else:
+            if blist:
+                print("*", line)
+            elif nlist:
+                print(str(nlistnum) + ".", line)
+            else:
+                print(line)
 
     history.append(req)
