@@ -1,10 +1,19 @@
 import socket
 
+history = []
+
 while True:
     req = input("> ").strip()
 
     if req.lower() == "q":
         break
+    if req.lower() == "b":
+        if len(history) >= 2:
+            history.pop()
+            req = history.pop()
+        else:
+            print("No more history")
+            continue
 
     try:
         while True:
@@ -33,3 +42,4 @@ while True:
         body = body.decode("UTF-8")
         print(body)
 
+    history.append(req)
