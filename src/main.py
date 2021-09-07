@@ -7,6 +7,10 @@ while True:
     cmd = input("> ").strip()
     if cmd.lower() == "q":
         break
+    if cmd.lower() == "h":
+        for cmd in history:
+            print(cmd)
+        continue
     if cmd.lower() == "b":
         if len(history) >= 2:
             history.pop()
