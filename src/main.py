@@ -1,33 +1,32 @@
 import socket
+import urllib.parse
 
 history = []
 
 while True:
-    req = input("> ").strip()
-
-    if req.lower() == "q":
+    cmd = input("> ").strip()
+    if cmd.lower() == "q":
         break
-    if req.lower() == "b":
+    if cmd.lower() == "b":
         if len(history) >= 2:
             history.pop()
-            req = history.pop()
+            cmd = history.pop()
         else:
             print("No more history")
             continue
 
     try:
         while True:
-            s = socket.create_connection(("127.0.0.1", "1866"))
+            url = urllib.parse.urlparse(cmd)
+            s = socket.create_connection((url.netloc, 1866))
+            req = "rydja1\tpull\t" + url.path
             s.sendall(req.encode("UTF-8"))
 
             fp = s.makefile("rb")
             header = fp.readline()
             header = header.decode("UTF-8").strip()
             _, status = header.split()
-            if status == "B":
-                print("Error code B: file not found")
-                break
-            elif status != "A":
+            if status != "A":
                 print("Error code", status)
                 break
             else:
@@ -65,4 +64,4 @@ while True:
             else:
                 print(line)
 
-    history.append(req)
+    history.append(cmd)
