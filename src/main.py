@@ -23,7 +23,7 @@ while True:
         while True:
             url = urllib.parse.urlparse(cmd)
             s = socket.create_connection((url.netloc, 1866))
-            req = "rydja1\tpull\t" + url.path
+            req = "odin\tpull\t" + url.path
             s.sendall(req.encode("UTF-8"))
 
             fp = s.makefile("rb")
@@ -45,7 +45,7 @@ while True:
     blist, nlist = False, False
     nlistnum = 1
     for line in body.splitlines():
-        if line.startswith("@rydja"):
+        if line.startswith("@odin"):
             print(line.split("(")[1].split(")")[0])
             print("----------")
         elif line.startswith("@head"):
